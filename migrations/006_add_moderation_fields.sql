@@ -1,0 +1,2 @@
+-- Add new fields to moderation_settings table
+-- Removed unnecessary moderation settings fields

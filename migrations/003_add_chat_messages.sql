@@ -1,0 +1,8 @@
+-- Add chat messages table
+CREATE TABLE IF NOT EXISTS chat_message (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id VARCHAR(120) NOT NULL,
+    message TEXT NOT NULL,
+    is_ai BOOLEAN DEFAULT FALSE,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+);

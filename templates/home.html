@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        {% include 'partials/_sidebar.html' %}
+        <main id="main-content" class="col-md-10 ms-sm-auto col-lg-10 px-md-4 main-content">
+            <div class="hero-section text-center py-5">
+                <h1 class="display-4 mb-4">WhatsApp CRM & Helpdesk Platform</h1>
+                <p class="lead mb-4">Streamline your customer communications with our AI-powered WhatsApp business solution</p>
+                <div class="cta-buttons">
+                    <a href="{{ url_for('ai_chat_route') }}" class="btn btn-primary btn-lg me-3">Get Started</a>
+                    <a href="#features" class="btn btn-outline-primary btn-lg">Learn More</a>
+                </div>
+            </div>
+            
+            <div id="features" class="features-section py-5">
+                <h2 class="text-center mb-5">Key Features</h2>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="feature-card p-4 text-center">
+                            <i class="material-icons feature-icon mb-3">chat</i>
+                            <h3>WhatsApp Integration</h3>
+                            <p>Connect with customers seamlessly through WhatsApp Business API</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="feature-card p-4 text-center">
+                            <i class="material-icons feature-icon mb-3">support_agent</i>
+                            <h3>AI Support Bot</h3>
+                            <p>24/7 automated customer support with our intelligent chatbot</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="feature-card p-4 text-center">
+                            <i class="material-icons feature-icon mb-3">analytics</i>
+                            <h3>Analytics Dashboard</h3>
+                            <p>Track and analyze customer interactions and team performance</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="settings-section py-5">
+                <h2 class="text-center mb-5">Configure Your AI Assistant</h2>
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <form id="settings-form">
+                            <div class="mb-4">
+                                <label for="moderation_prompt" class="form-label">AI Assistant Instructions</label>
+                                <textarea class="form-control" id="moderation_prompt" name="moderation_prompt" rows="3" placeholder="Enter custom instructions for your AI assistant">{{ settings.moderation_prompt }}</textarea>
+                                <small class="form-text text-muted">Customize how your AI assistant interacts with customers</small>
+                            </div>
+                            <div class="mb-4">
+                                <label for="model_selection" class="form-label">Choose AI Model</label>
+                                <select class="form-control custom-select" id="model_selection" name="model_selection">
+                                    <option value="gpt-4o" {% if settings.model_selection == 'gpt-4o' %}selected{% endif %}>GPT-4o (Recommended)</option>
+                                    <option value="gpt-4o-mini" {% if settings.model_selection == 'gpt-4o-mini' %}selected{% endif %}>GPT-4o Mini (Faster)</option>
+                                    <option value="claude-3-5-sonnet" {% if settings.model_selection == 'claude-3-5-sonnet' %}selected{% endif %}>Claude 3.5 Sonnet</option>
+                                    <option value="claude-3-haiku" {% if settings.model_selection == 'claude-3-haiku' %}selected{% endif %}>Claude 3 Haiku</option>
+                                    <option value="gemini-1.5-pro" {% if settings.model_selection == 'gemini-1.5-pro' %}selected{% endif %}>Gemini 1.5 Pro</option>
+                                    <option value="gemini-1.5-flash" {% if settings.model_selection == 'gemini-1.5-flash' %}selected{% endif %}>Gemini 1.5 Flash</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label for="temperature" class="form-label">AI Response Style</label>
+                                <input type="range" class="form-range" id="temperature" name="temperature" min="0" max="2" step="0.1" value="{{ settings.temperature }}">
+                                <div class="d-flex justify-content-between">
+                                    <small class="form-text text-muted">More Precise</small>
+                                    <small class="form-text text-muted">More Creative</small>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const settingsForm = document.getElementById('settings-form');
+    if (settingsForm) {
+        settingsForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(settingsForm);
+            fetch('/api/update_settings', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    showModal(data.message);
+                } else {
+                    showModal('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showModal('An error occurred while saving the settings');
+            });
+        });
+    }
+});
+</script>
+{% endblock %}
