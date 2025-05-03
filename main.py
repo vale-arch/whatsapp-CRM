@@ -1,6 +1,6 @@
 import logging
 from gunicorn.app.base import BaseApplication
-from app_init import create_initialized_flask_app
+from app_int import create_initialized_flask_app
 
 # Flask app creation should be done by create_initialized_flask_app to avoid circular dependency problems.
 app = create_initialized_flask_app()

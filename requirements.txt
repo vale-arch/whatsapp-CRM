@@ -1,8 +1,6 @@
-Flask
+Flask==3.0.1
 Flask-SQLAlchemy
-Flask-Static-Compress
-flask-static-compress
-flask==3.0.1
+Flask-static-compress
 gunicorn
 requests
 werkzeug==3.0.1
